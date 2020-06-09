@@ -1,0 +1,22 @@
+exe:0.42
+link:https://practice.geeksforgeeks.org/problems/diameter-of-binary-tree/1/?track=ppc-trees&batchId=221
+//function problem
+
+int solve(Node *root, int &res){
+    if(root==NULL)
+    return 0;
+    
+    int l = solve(root->left, res);
+    int r = solve(root->right, res);
+    int temp = max(l, r) + 1;
+    int ans = max(temp, l+r+1);
+    res = max(ans, res);
+    
+    return temp;
+}
+int diameter(Node* node) {
+    // Your code here
+    int res=0;
+    solve(node, res);
+    return res;
+}
