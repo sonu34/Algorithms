@@ -1,0 +1,84 @@
+Qus link : https://practice.geeksforgeeks.org/problems/topological-sort/1/?track=ppc-graph&batchId=221
+
+#include <bits/stdc++.h>
+using namespace std;
+
+vector <int> topoSort(int N, vector<int> adj[]);
+
+/*  Function to check if elements returned by user
+*   contains the elements in topological sorted form
+*   V: number of vertices
+*   *res: array containing elements in topological sorted form
+*   adj[]: graph input
+*/
+bool check(int V, vector <int> &res, vector<int> adj[]) {
+    vector<int> map(V, -1);
+    for (int i = 0; i < V; i++) {
+        map[res[i]] = i;
+    }
+    for (int i = 0; i < V; i++) {
+        for (int v : adj[i]) {
+            if (map[i] > map[v]) return false;
+        }
+    }
+    return true;
+}
+
+// Driver Code
+int main() {
+    int T;
+    cin >> T;
+    while (T--) {
+        int N, E;
+        cin >> E >> N;
+        int u, v;
+
+        vector<int> adj[N];
+
+        for (int i = 0; i < E; i++) {
+            cin >> u >> v;
+            adj[u].push_back(v);
+        }
+
+        vector <int> res = topoSort(N, adj);
+
+        cout << check(N, res, adj) << endl;
+    }
+}// } Driver Code Ends
+
+
+// The Graph structure is as folows
+
+/*  Function which sorts the graph vertices in topological form
+*   N: number of vertices
+*   adj[]: input graph
+*/
+
+//my code start....
+void topountil(int i, vector<bool>& vis, stack<int>& s, vector<int> adj[]){
+    vis[i]=true;
+    for(auto it=adj[i].begin();it!=adj[i].end();++it){
+        if(!vis[*it]){
+            //vis[*it]=true;
+            topountil(*it, vis, s, adj);
+        }
+    }
+    s.push(i);
+}
+vector<int> topoSort(int v, vector<int> adj[]) {
+    // Your code here
+    vector<bool> vis(v, false);
+    stack<int> s;
+    for(int i=0;i<v;i++){
+        if(!vis[i]){
+            topountil(i, vis, s, adj);
+        }
+    }
+    vector<int> ans;
+    while(!s.empty()){
+        ans.push_back(s.top());
+        s.pop();
+    }
+    return ans;
+}
+//my code end!
