@@ -1,0 +1,58 @@
+Qus link : https://practice.geeksforgeeks.org/problems/detect-cycle-in-a-directed-graph/1/?track=ppc-graph&batchId=221
+
+#include <bits/stdc++.h>
+using namespace std;
+
+void dfs(int V, vector<int> adj[], vector<bool>& vis, int i,int &k, int inthecall){
+    vis[i]=true;
+    for(auto it=adj[i].begin();it!=adj[i].end();++it){
+        if(!vis[*it])
+        dfs(V,adj,vis,*it,k,inthecall);
+        else{
+            if(inthecall==*it){
+               k=1;
+               return; 
+            }
+        }
+    }
+}
+bool isCyclic(int V, vector<int> adj[])
+{
+    // Your code here
+    int s=0;
+    
+    int k=0;
+    for(int i=0;i<V;i++){
+        vector<bool>vis(V, false);
+        dfs(V, adj, vis, i, k, i);
+        if(k==1)
+        return true;
+    }
+    return false;
+}
+
+
+int main() {
+	
+	int t;
+	cin >> t;
+	
+	while(t--){
+	    
+	    int v, e;
+	    cin >> v >> e;
+	    
+	    vector<int> adj[v];
+	    
+	    for(int i =0;i<e;i++){
+	        int u, v;
+	        cin >> u >> v;
+	        adj[u].push_back(v);
+	    }
+	    
+	    cout << isCyclic(v, adj) << endl;
+	    
+	}
+	
+	return 0;
+}
