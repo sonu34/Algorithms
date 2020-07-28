@@ -1,0 +1,49 @@
+Qus link : https://leetcode.com/problems/n-queens/
+
+class Solution {
+public:
+    bool issafe(vector<string> board, int p, int q){
+        if(p==0)
+            return true;
+        //vertical check
+        int n = board.size();
+        for(int i=0;i<p;i++){
+            if(board[i][q]=='Q')
+                return false;
+        }
+        for(int i=0;i<p;i++){
+            for(int j=0;j<n;j++){
+                if( abs(p - i) == abs(q - j) && board[i][j] == 'Q' )
+                    return false;
+            }
+        }
+        return true;
+    }
+    void nqueen(int n, int i, vector<string>& board, vector<vector<string>>& ans){
+        if(n==i){
+            ans.push_back(board);
+            return;
+        }
+        
+        for(int j=0;j<n;j++){
+            if(issafe(board, i, j) == true){
+                //cout<<"!";
+                board[i][j]='Q'; //place
+                nqueen(n, i+1, board, ans); //increment
+                //cout<<"!";
+                board[i][j]='.'; //undo
+                //trust the recursion to do its job
+            }
+        }
+        return;
+    }
+    vector<vector<string>> solveNQueens(int n) {
+        vector<string> board;
+        vector<vector<string>> ans;
+        for(int i=0;i<n;i++)
+            board.push_back(string(n,'.'));
+        nqueen(n,0,board,ans);
+        //cout<<ans.size();
+        return ans;
+    }
+};
