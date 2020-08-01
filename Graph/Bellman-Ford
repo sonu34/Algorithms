@@ -1,0 +1,60 @@
+Qus link : https://practice.geeksforgeeks.org/problems/negative-weight-cycle/0
+exe:0.01
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int main()
+ {
+	//code
+	int t;
+	cin>>t;
+	while(t--){
+	   int v,e;
+	   cin>>v>>e;
+	   //vector<pair<int,int>> g[e];
+	   int x=3;
+	   //int x2=e+1;
+	   vector<vector<int> > g( v , vector<int> (x, 0)); 
+	   int u1,v1,w;
+	   for(int i=0;i<e;i++){
+	       cin>>u1>>v1>>w;
+	       g[u1][v1] = w;
+	   }
+	   
+	   vector<int> d(v, 100000);
+	   d[0]=0;
+	   int f=0;
+	   for(int i=0;i<v;i++){
+	       for(int j=0;j<v;j++){
+	           for(int k=0;k<3;k++){
+	               if(g[j][k]!=0){
+	                   if(d[k] > d[j]+g[j][k]){
+	                       d[k] = d[j]+g[j][k];
+	                   }
+	               }
+	           }
+	       }
+	   }
+	   //for(int i=0;i<v;i++){
+	       for(int j=0;j<v;j++){
+	           for(int k=0;k<3;k++){
+	               if(g[j][k]!=0){
+	                   if(d[k] > d[j]+g[j][k]){
+	                       f=1;
+	                       break;
+	                   }
+	               }
+	           }
+	           if(f==1)
+	           break;
+	       }
+	   //}
+	   if(f==1)
+	   cout<<"1";
+	   else
+	   cout<<"0";
+	   cout<<endl;
+	}
+	return 0;
+}
