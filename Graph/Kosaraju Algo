@@ -1,0 +1,80 @@
+Qus link: https://practice.geeksforgeeks.org/problems/strongly-connected-components-kosarajus-algo/1
+
+#include<bits/stdc++.h>
+
+using namespace std;
+
+ // } Driver Code Ends
+
+
+/*  Function to find the number of strongly connected components
+*   using Kosaraju's algorithm
+*   V: number of vertices
+*   adj[]: array of vectors to represent graph
+*/
+void dfs(vector<int> adj[], vector<bool>& vis, int i){
+    vis[i]=true;
+    for(auto it=adj[i].begin();it!=adj[i].end();it++){
+        if(!vis[*it])
+        dfs(adj,vis,*it);
+    }
+}
+void calc_time(int v,stack<int> &st,bool visit[],vector<int> adj[], int V)
+{
+    visit[v]=true;
+    for(auto i=adj[v].begin();i!=adj[v].end();i++)
+    {
+        if(visit[*i]==false){
+            calc_time(*i,st,visit,adj,V);
+        }
+    }
+    st.push(v);
+}
+
+int kosaraju(int V, vector<int> adj[])
+{
+    // Your code here
+    bool visit[V]={};
+    stack<int> s;
+    for(int i=0;i<V;i++){
+        if(visit[i]==false)
+        calc_time(i, s, visit, adj, V);
+    }
+    vector<int> adj1[V];
+    for(int i=0;i<V;i++){
+        for(auto it=adj[i].begin();it!=adj[i].end();it++){
+            adj1[*it].push_back(i);
+        }
+    }
+    int ans=0;
+    vector<bool> vi(V, false);
+    while(!s.empty()){
+        int x = s.top();
+        s.pop();
+        if(!vi[x]){
+            dfs(adj1,vi,x);
+            ans++;
+        }
+    }
+    return ans;
+}
+
+// { Driver Code Starts.
+
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int a, b;
+        cin >> a >> b;
+        int m, n;
+        vector<int> adj[a];
+        for (int i = 0; i < b; i++) {
+            cin >> m >> n;
+            adj[m].push_back(n);
+        }
+        cout << kosaraju(a, adj) << endl;
+    }
+    return 0;
+}
+  // } Driver Code Ends
