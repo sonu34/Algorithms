@@ -1,0 +1,46 @@
+Qus link: https://leetcode.com/contest/weekly-contest-204/problems/minimum-number-of-days-to-disconnect-island/
+
+int row[]={-1,1,0,0};
+int col[]={0,0,-1,1};
+class Solution {
+private:
+    void dfs(vector<vector<int>>& grid, int i, int j, vector<vector<bool>>& vis, int r, int c){
+        // if(i<0 || j<0 || i>=r || j>=c || vis[i][j] || grid[i][j]==0) return;
+        vis[i][j]=true;
+        // grid[i][j]=0;
+        for(int p=0;p<4;p++){
+            int di = row[p]+i;
+            int dj = col[p]+j;
+            if(di>=0 && dj>=0 && di<r && dj<c){
+                if( !vis[di][dj] && grid[di][dj]==1) dfs(grid, di, dj, vis, r, c);
+            }
+        }
+    }
+    bool disconnected(vector<vector<int>>& grid, int r, int c){
+        vector<vector<bool>> vis(r, vector<bool>(c, false));
+        int cnt = 0;
+        for(int i=0;i<r;i++){
+            for(int j=0;j<c;j++){
+                if(grid[i][j]==0 || vis[i][j]) continue;
+                if(++cnt > 1) return true;
+                dfs(grid, i, j, vis, r, c);
+            }
+        }
+        return false;
+    }
+public:
+    int minDays(vector<vector<int>>& grid) {
+        int r=grid.size();
+        int c=grid[0].size();
+        if(disconnected(grid, r, c)) return 0;
+        for(int i=0;i<r;i++){
+            for(int j=0;j<c;j++){
+                if(grid[i][j]==0) continue;
+                grid[i][j]=0;
+                if(disconnected(grid, r, c)) return 1;
+                grid[i][j]=1;
+            }
+        }
+        return 2;
+    }
+};
